@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="enregistrement.css">
+    <title>enregistrement</title>
+</head>
+<body>
+    <section>
+        <div class="fruitList">
+            <!-- <table></table> -->
+        </div>
+        <!-- <button> Supprimer </button> -->
+    </section>
+    <script>
+    const fruitTab = document.querySelector('.fruitList');
+
+    function selectRow(index) {
+        allRow = document.querySelectorAll('tbody tr');
+        allRow.forEach(item => {
+            if(item.style.backgroundColor == 'green') {
+                item.style.backgroundColor = 'green';
+            } else {
+                item.style.backgroundColor = 'white';
+            }
+        })
+
+        console.log(index);
+        const element = document.getElementById(index);
+        const elementColor  = element.style.backgroundColor;
+        console.log(elementColor)
+        if(elementColor == 'white') {
+            element.style.backgroundColor = 'green';
+        } else {
+            element.style.backgroundColor = 'white';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', getFruit);
+
+      function getFruit(e){
+            const fruitRecupe = JSON.parse(localStorage.getItem('productTab'));
+            const fruitList = document.querySelector('.fruitList');
+            if(fruitList){
+                if(fruitRecupe){
+                    let totalPrice = 0;
+                    let N = 1 ;
+                    let fruitLine =``;
+                   fruitRecupe.forEach(item =>{
+                    fruitLine += `
+                    <tr id=${N} onclick="selectRow(${N})">
+                        <td>${N++}</td>
+                        <td>${item.fruit}</td>
+                        <td>${item.prixUnit}</td>
+                        <td>${item.stock}</td>
+                        <td>${item.prixTotal}</td>
+                    </tr>
+                    `
+                    totalPrice += item.prixTotal
+                   });
+                   return `
+                        ${fruitLine}
+                        <tr>
+                            <td colspan="4">Cout:</td>
+                            <td>${totalPrice}</td>
+                        </td>
+                        ` 
+            }
+        }
+    }
+            const schema = `
+                    <table>
+                        <thead>
+                            <th>N°</th> 
+                            <th>Produit</th>
+                            <th>Prix unitaire</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                        </thead>
+                        <tbody>
+                            ${getFruit()}
+                        </tbody>
+                    </table>
+                `
+                fruitTab.innerHTML = schema;
+    </script>
+</body>
+</html>

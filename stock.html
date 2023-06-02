@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stock.css">
+    <title>gestion de stock</title>
+</head>
+<body>
+    <section>
+        <form method="post" action="">        
+            <label for="fruit">Fruits:</label><input type="text" name="fruitName" id="fruit" required>
+            <label for="prixU">Prix Unitaire:</label><input type="number" name="prixUnitaire" id="prixU" required>
+            <label for="qteDisponible">Stock:</label><input type="number" name="qteDispo" id="qteDisponible" required>
+            <div id="form-buttons">
+                <input type="reset" id="reset" value="Reprendre">
+                <button id="submit">Envoyer</button>
+            </div>
+        </form>
+        <div>
+            <button id="next">Voir</button>
+        </div>
+        <p class="error"></p>
+    </section>
+
+    <script>
+        /* SELECTEURS */
+        const product = document.querySelector('form');
+        const productTab = [];
+        const see = document.querySelector('#next');
+
+        /* ECOUTEURS */
+        product.addEventListener('submit', addFruit);
+        see.addEventListener('click', seeTab)
+
+        /* FUNCTIONS */
+        function addFruit (event){
+            event.preventDefault();
+            let fruit = document.querySelector('input[name="fruitName"]');
+            let prixUnit = document.querySelector('input[name="prixUnitaire"]');
+            let stock = document.querySelector('input[name="qteDispo"]');
+            const prixTotal = prixUnit * stock;
+            let errorText = document.querySelector('.error');
+
+            if(product){
+                if(fruit=='' || prixUnit=='' || stock==''){
+                    errorText.innerHTML = 'Veuillez remplir tous les champs';
+                    errorText.classList.add('active');
+                }else{
+                    errorText.innerHTML = '';
+                    errorText.classList.remove('active');
+
+                    const fruitData = {
+                        'fruit':fruit.value,
+                        'prixUnit':prixUnit.value,
+                        'stock':stock.value,
+                        'prixTotal':prixUnit.value * stock.value
+                    }
+
+                    productTab.push(fruitData);
+                    localStorage.setItem('productTab', JSON.stringify(productTab));
+                    fruit.value = '';
+                    prixUnit.value = '';
+                    stock.value = '';                   
+             }
+        }
+    }       
+        function seeTab(){
+            window.open('enregistrement.html')
+        }
+    </script>
+</body>
+</html>
